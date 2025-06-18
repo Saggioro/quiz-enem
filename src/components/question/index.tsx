@@ -2,10 +2,11 @@ import Image from "next/image";
 import Button from "../button";
 import { Suspense, useState } from "react";
 
-import { Container, ErrorMessage, Options } from "./styles";
+import { Container, ErrorMessage } from "./styles";
 import { AlternativeType, QuestionType, useQuizStore } from "@/store/quizStore";
 
 import clsx from "clsx";
+import ChatBotModal from "../chatbotModal";
 
 const CorrectIcon = () => (
   <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-500 mr-3">
@@ -62,6 +63,7 @@ export default function Question({
   const [isSubmited, setIsSubmited] = useState(false);
   const [error, setError] = useState(false);
   const { answerQuestion } = useQuizStore();
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleSubmit = () => {
     if (!selectedAlternative) {
@@ -157,14 +159,21 @@ export default function Question({
           >
             {isSubmited ? "Próxima Questão" : "Enviar"}
           </Button>
+
           <button
             type="button"
-            className="h-16 w-16 rounded-full bg-gray-200 text-black font-semibold flex items-center justify-center shadow-lg"
+            className="h-18 w-18 rounded-full bg-slate-800 hover:bg-slate-700 text-white font-semibold flex items-center justify-center shadow-lg"
+            onClick={() => setIsChatOpen(true)}
           >
-            ChatBot
+            Aprend+
           </button>
         </div>
       </Container>
+      <ChatBotModal
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        question={question}
+      />
     </Suspense>
   );
 }
